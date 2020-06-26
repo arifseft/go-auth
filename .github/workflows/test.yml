@@ -1,0 +1,45 @@
+name: test
+
+on: 
+  push:
+    branches:
+      - master
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_PASSWORD: developer
+          POSTGRES_DB: golang_example_db_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5433:5432
+    
+    steps:
+      - name: Install Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.13.x
+        id: go
+
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Run tests
+        run: |
+          go test ./... -coverprofile=coverage_unit.out
+          go test ./tests -coverpkg=./... -coverprofile=coverage_int.out
+          grep 'mode' coverage_unit.out > coverage.out.tmp
+          grep 'github' coverage_unit.out >> coverage.out.tmp
+          grep 'github' coverage_int.out >> coverage.out.tmp
+          grep -A10 'files:' ignore_test.yml | grep -v "files:" | sed 's/ //g' > coverage.out.list
+          grep -v -F -f coverage.out.list coverage.out.tmp > coverage.out
+          go tool cover -func=coverage.out
+          rm -f coverage*

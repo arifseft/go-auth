@@ -1,0 +1,5 @@
+ignore:
+  src/apps/application.go
+  src/database/connection.go
+  src/helpers/
+  src/database/migration/
