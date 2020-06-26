@@ -52,9 +52,9 @@ type UserExistParams struct {
 func (r *UserRepository) UserExist(param UserExistParams) entity.User {
 	user := entity.User{}
 	if param.ID == 0 {
-		r.Conn.Select("email").Where(&entity.User{Email: param.Email}).First(&user)
+		r.Conn.Select("id, email, password").Where(&entity.User{Email: param.Email}).First(&user)
 	} else {
-		r.Conn.Select("id").Where(&entity.User{ID: param.ID}).First(&user)
+		r.Conn.Select("id, email, password").Where(&entity.User{ID: param.ID}).First(&user)
 	}
 	return user
 }

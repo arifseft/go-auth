@@ -4,6 +4,7 @@ import (
 	"github.com/arifseft/go-auth/src/database/entity"
 	"github.com/arifseft/go-auth/src/middlewares/exception"
 	"github.com/arifseft/go-auth/src/repositories"
+	"golang.org/x/crypto/bcrypt"
 )
 
 // UserService -> the propose of user service is handling business logic application
@@ -37,6 +38,11 @@ func (s *UserService) GetUser(id int64) repositories.GetUser {
 	return user
 }
 
+func hashPassword(password string) (string, error) {
+	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
+	return string(bytes), err
+}
+
 // CreateUser -> create user service logic
 func (s *UserService) CreateUser(user entity.User) repositories.GetUser {
 	userExist := s.UserRepository.UserExist(
@@ -49,6 +55,7 @@ func (s *UserService) CreateUser(user entity.User) repositories.GetUser {
 		})
 	}
 
+	user.Password, _ = hashPassword(user.Password)
 	data := s.UserRepository.CreateUser(user)
 	return data
 }
@@ -78,18 +85,3 @@ func (s *UserService) DeleteUser(id uint) repositories.GetUser {
 	data := s.UserRepository.DeleteUser(id)
 	return data
 }
-
-// func (s *UserService) Login(login schemas.Login) repositories.GetUser {
-//     userExist := s.UserRepository.UserExist(
-//         repositories.UserExistParams{Email: user.Email},
-//     )
-//
-//     if (userExist != entity.User{}) {
-//         exception.Conflict("User conflict", []map[string]interface{}{
-//             {"message": "User with this email already exist", "flag": "USER_ALREADY_EXIST"},
-//         })
-//     }
-//
-//     data := s.UserRepository.CreateUser(user)
-//     return data
-// }

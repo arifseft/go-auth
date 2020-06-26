@@ -23,7 +23,6 @@ type UpdateUser struct {
 }
 
 type Login struct {
-	Email    string `validate:"required,email"`
+	Username string `validate:"required"` // use email instead of username
 	Password string `validate:"required"`
 }
-

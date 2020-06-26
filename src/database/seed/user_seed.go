@@ -5,6 +5,7 @@ import (
 	"github.com/bxcodec/faker"
 	"github.com/jinzhu/gorm"
 	"github.com/sirupsen/logrus"
+	"golang.org/x/crypto/bcrypt"
 )
 
 // CreateUser is seeder to create user
@@ -14,11 +15,14 @@ func CreateUser(db *gorm.DB) error {
 		logrus.Errorln("Error user seed", err)
 	}
 
+	bytes, _ := bcrypt.GenerateFromPassword([]byte(user.Password), 14)
+	hashedPassword := string(bytes)
+
 	return db.Create(&entity.User{
 		Name:     user.Name,
 		Address:  user.Address,
 		Age:      user.Age,
 		Email:    user.Email,
-		Password: user.Password,
+		Password: hashedPassword,
 	}).Error
 }

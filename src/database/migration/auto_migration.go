@@ -8,4 +8,5 @@ import (
 // AutoMigration is auto migrate database
 func AutoMigration(conn *gorm.DB) {
 	conn.AutoMigrate(entity.User{})
+	conn.AutoMigrate(entity.Auth{})
 }

@@ -99,19 +99,3 @@ func (u *UserController) DeleteUser(c *gin.Context) {
 		"error":   nil,
 	})
 }
-
-
-// Login -> login route
-// POST /user/login
-// func (u *UserController) Login(c *gin.Context) {
-//     var login schemas.Login
-//     _ = c.ShouldBindBodyWith(&login, binding.JSON)
-//
-//     data := u.Service.Login(login)
-//     c.JSON(http.StatusOK, gin.H{
-//         "status":  http.StatusOK,
-//         "message": flag.CreateUserSuccess.Message,
-//         "data":    data,
-//         "error":   nil,
-//     })
-// }

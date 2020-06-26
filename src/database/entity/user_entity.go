@@ -14,3 +14,9 @@ type User struct {
 	UpdatedAt time.Time  `gorm:"default:CURRENT_TIMESTAMP" json:"updated_at"`
 	DeletedAt *time.Time `json:"deleted_at,omitempty"`
 }
+
+type Auth struct {
+	ID       uint   `gorm:"primary_key" json:"id"`
+	UserID   uint   `json:"user_id"`
+	AuthUUID string `json:"auth_uuid"`
+}

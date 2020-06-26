@@ -44,3 +44,23 @@ func InternalServerError(message string, errors []map[string]interface{}) {
 	}
 	panic(response)
 }
+
+func Unauthorized(message string, errors []map[string]interface{}) {
+	response := map[string]interface{}{
+		"status":  http.StatusUnauthorized,
+		"message": message,
+		"data":    nil,
+		"errors":  errors,
+	}
+	panic(response)
+}
+
+func Forbidden(message string, errors []map[string]interface{}) {
+	response := map[string]interface{}{
+		"status":  http.StatusForbidden,
+		"message": message,
+		"data":    nil,
+		"errors":  errors,
+	}
+	panic(response)
+}
